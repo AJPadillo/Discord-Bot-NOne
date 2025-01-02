@@ -1,4 +1,5 @@
 import discord
+import os
 
 client = discord.Client()
 
@@ -15,4 +16,4 @@ async def on_message(message):
         await message.channel.send('Hello!')
 
 #Ejecuta el cliente en el servidor
-client.run()
+client.run(os.getenv('TOKEN'))
