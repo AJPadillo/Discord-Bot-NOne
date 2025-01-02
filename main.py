@@ -1,7 +1,15 @@
 import discord
 import os
+from dotenv import load_dotenv
 
-client = discord.Client()
+# Cargar las variables de entorno del archivo .env
+load_dotenv()
+
+# Crear un objeto Intents
+intents = discord.Intents.default()
+intents.message_content = True  # Habilitar el acceso al contenido de los mensajes
+
+client = discord.Client(intents=intents)
 
 @client.event
 async def on_ready():
