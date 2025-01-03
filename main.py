@@ -14,6 +14,14 @@ intents.message_content = True  # Habilitar el acceso al contenido de los mensaj
 
 client = discord.Client(intents=intents)
 
+sad_words = ['sad', 'depressed', 'unhappy', 'angry', 'miserable', 'depressing']
+
+starter_encouragements = [
+    'Cheer up!',
+    'Hang in there.',
+    'You are a great person / bot!'
+]
+
 def get_quote():
     response = requests.get('https://zenquotes.io/api/random')
     json_data = json.loads(response.text)
