@@ -41,5 +41,8 @@ async def on_message(message):
         quote = get_quote()
         await message.channel.send(quote)
 
+    if any(word in message.content for word in sad_words):
+        await message.channel.send(f'{message.author.mention} {random.choice(starter_encouragements)}')
+
 #Ejecuta el cliente en el servidor
 client.run(os.getenv('TOKEN'))
