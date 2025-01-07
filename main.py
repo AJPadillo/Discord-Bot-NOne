@@ -46,6 +46,10 @@ def get_quote():
     quote = json_data[0]['q'] + ' -' + json_data[0]['a']
     return quote
 
+def get_random_encouragement():
+    cursor.execute("SELECT message FROM encouragements ORDER BY RANDOM() LIMIT 1") #Obtener un mensaje de ánimo aleatorio desde la base de datos.
+    return cursor.fetchone()[0]
+
 @client.event
 async def on_ready():
     print(f'We have logged in as {client.user}')
