@@ -2,17 +2,29 @@ import discord
 import os
 import requests
 import json
+import sqlite3
+import random
 
 from dotenv import load_dotenv
 
-# Cargar las variables de entorno del archivo .env
-load_dotenv()
+load_dotenv() # Cargar las variables de entorno del archivo .env
 
-# Crear un objeto Intents
 intents = discord.Intents.default()
 intents.message_content = True  # Habilitar el acceso al contenido de los mensajes
 
 client = discord.Client(intents=intents)
+
+conn = sqlite3.connect("encouragements.db")
+cursor = conn.cursor()
+
+# Crear tabla si no existe
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS encouragements (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    message TEXT
+)
+""")
+conn.commit()
 
 sad_words = ['sad', 'depressed', 'unhappy', 'angry', 'miserable', 'depressing']
 
@@ -21,6 +33,12 @@ starter_encouragements = [
     'Hang in there.',
     'You are a great person / bot!'
 ]
+
+cursor.execute("SELECT COUNT(*) FROM encouragements")
+if cursor.fetchone()[0] == 0:
+    cursor.executemany("INSERT INTO encouragements (message) VALUES (?)",
+                       [(msg,) for msg in starter_encouragements])
+    conn.commit()
 
 def get_quote():
     response = requests.get('https://zenquotes.io/api/random')
