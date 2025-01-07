@@ -66,5 +66,11 @@ async def on_message(message):
     if any(word in message.content for word in sad_words):
         await message.channel.send(f'{message.author.mention} {random.choice(starter_encouragements)}')
 
+    if message.content.startswith('$add '):
+        new_message = message.content[5:].strip()
+        cursor.execute("INSERT INTO encouragements (message) VALUES (?)", (new_message,))
+        conn.commit()
+        await message.channel.send(f'Encouragement added: {new_message}')
+
 #Ejecuta el cliente en el servidor
 client.run(os.getenv('TOKEN'))
