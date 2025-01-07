@@ -67,16 +67,22 @@ async def on_message(message):
         await message.channel.send(f'{message.author.mention} {random.choice(starter_encouragements)}')
 
     if message.content.startswith('$add '):
-        new_message = message.content[5:].strip()
+        new_message = message.content[5:].strip() #Crear un nuevo mensaje de ánimo
         cursor.execute("INSERT INTO encouragements (message) VALUES (?)", (new_message,))
         conn.commit()
         await message.channel.send(f'Encouragement added: {new_message}')
     
-    if message.content.startswith('$list'):
+    if message.content.startswith('$list'): #Listar todos los mensajes de ánimo
         cursor.execute("SELECT message FROM encouragements")
         all_encouragements = cursor.fetchall()
         formatted = "\n".join([msg[0] for msg in all_encouragements])
         await message.channel.send(f"Encouragements:\n{formatted}")
+    
+    if message.content.startswith('$remove '): #Eliminar un mensaje de ánimo
+        remove_message = message.content[8:].strip()
+        cursor.execute("DELETE FROM encouragements WHERE message = ?", (remove_message,))
+        conn.commit()
+        await message.channel.send(f'Removed encouragement: {remove_message}')
 
 #Ejecuta el cliente en el servidor
 client.run(os.getenv('TOKEN'))
