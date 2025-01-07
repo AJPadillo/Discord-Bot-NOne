@@ -71,6 +71,12 @@ async def on_message(message):
         cursor.execute("INSERT INTO encouragements (message) VALUES (?)", (new_message,))
         conn.commit()
         await message.channel.send(f'Encouragement added: {new_message}')
+    
+    if message.content.startswith('$list'):
+        cursor.execute("SELECT message FROM encouragements")
+        all_encouragements = cursor.fetchall()
+        formatted = "\n".join([msg[0] for msg in all_encouragements])
+        await message.channel.send(f"Encouragements:\n{formatted}")
 
 #Ejecuta el cliente en el servidor
 client.run(os.getenv('TOKEN'))
